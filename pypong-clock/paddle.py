@@ -30,8 +30,8 @@ class Paddle(pygame.sprite.DirtySprite):
         self.track_to_position = position[1]
         self.play_area = playarea
         self.miss_value = 0
-        self.random_hit_range = range(int(self._rect.height / 2 *- 0.85),
-                                      int(self._rect.height / 2 * .85) + 1)
+        self.random_hit_range = list(range(int(self._rect.height / 2 *- 0.85),
+                                      int(self._rect.height / 2 * .85) + 1))
         self.deflection_values = self.create_ball_spin_dictionary()
         self.dirty = 1
 
@@ -75,16 +75,16 @@ class Paddle(pygame.sprite.DirtySprite):
         quartiles[1].extend(quartiles[2])
         quartiles.pop(2)
         for q in quartiles:
-            print q
+            print(q)
         # quartiles start at negative values and increase to positives
         # [-10, -9, -8, -7, -6]
         # [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
         # [5, 6, 7, 8, 9, 10]
         ball_spin = {}
-        multipliers = list(reversed(range(-1, 2)))
+        multipliers = list(reversed(list(range(-1, 2))))
         counter = 0
         for quarter in quartiles:
-            print 'quarter', quarter, multipliers[counter]
+            print('quarter', quarter, multipliers[counter])
             for off_val in quarter:
                 ball_spin[off_val] = multipliers[counter]
             counter += 1

@@ -48,7 +48,7 @@ class ScoreDisplay:
         for number in self.numbers:
             seg_number = SegmentedNumber(pygame.Rect([self.position[0] + offset, self.position[1], self.digit_size[0], self.digit_size[1]]), number)
             self.update_group.append(seg_number)
-            print 'segment number ' , offset
+            print('segment number ' , offset)
             offset = offset + self.digit_size[0] + (self.digit_size[0] / 4)
     
     #----------------------------------------------------------------------
