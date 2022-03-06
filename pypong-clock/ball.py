@@ -77,7 +77,7 @@ class Ball(pygame.sprite.DirtySprite):
         # angle returned to be inaccurate and results in missed balls
         angle_b = math.degrees(math.atan(math.fabs(int(self.velocity[1])) / 
                                          math.fabs(int(self.velocity[0]))))        
-        print(self.velocity)
+        # print(self.velocity)
         angle_c = 180 - (90 + angle_b)
         left = False
 
@@ -90,7 +90,6 @@ class Ball(pygame.sprite.DirtySprite):
                          (self.rect.left + self.rect.width)
             #distance_c = self.play_area.width - self._rect.left
        
-        print('distance c', distance_c)
         
         down = False    
         if self.velocity[1] > 0: 
@@ -131,7 +130,7 @@ class Ball(pygame.sprite.DirtySprite):
         # Check collision with paddles       
         for paddle in self.paddles:
             if t_position.colliderect(paddle.rect) == 1:      # Collision occurred
-                print('collision - velocity in = ', self.velocity)
+                # print('collision - velocity in = ', self.velocity)
                 paddle_deflection = paddle.get_deflection_value(self.rect.centery)
                 assert isinstance(paddle_deflection, int)
                 if math.fabs(self.velocity[1] + paddle_deflection) \

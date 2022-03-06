@@ -48,7 +48,6 @@ class ScoreDisplay:
         for number in self.numbers:
             seg_number = SegmentedNumber(pygame.Rect([self.position[0] + offset, self.position[1], self.digit_size[0], self.digit_size[1]]), number)
             self.update_group.append(seg_number)
-            print('segment number ' , offset)
             offset = offset + self.digit_size[0] + (self.digit_size[0] / 4)
     
     #----------------------------------------------------------------------
@@ -61,9 +60,10 @@ class ScoreDisplay:
     #----------------------------------------------------------------------
     def update_display(self):
         """updates the display with the current score"""
-        
+
         counter = 0
         current_score = str(self.score).zfill(self.display_digits_count)
+
         for digit in current_score:
             self.update_group[counter].set_number(digit)
             counter += 1 

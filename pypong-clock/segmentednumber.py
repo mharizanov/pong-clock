@@ -46,11 +46,13 @@ class SegmentedNumber(pygame.sprite.DirtySprite):
         position = [0, 0]
         for number in numbers:
             mtd = getattr(self, NUMBER_NAMES[number])
-            print(str(mtd))
             number_instructions = mtd(position)
+
+        print(f"***set_number: {number}, number_instructions: {number_instructions}")
 
         #number_instructions has the rects to draw the number into self.image
         self.image = self.original_image.copy()
+        self.image.fill(BLACK)
         for instruction in number_instructions:
             self.image.fill(WHITE, instruction)
 
@@ -66,10 +68,8 @@ class SegmentedNumber(pygame.sprite.DirtySprite):
     def one(self, position=(0, 0)):
         """ Draw a 1 """
         retval = []
-        print('position', position)
         retval.append(self.segment_b(position))
         retval.append(self.segment_c(position))
-        print(retval)
         return retval
 
     def two(self, position):
