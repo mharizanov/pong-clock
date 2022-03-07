@@ -27,28 +27,28 @@ background = None
 #Set the framebuffer device to be the TFT
 os.environ["SDL_FBDEV"] = "/dev/fb1"
 
-#RESOLUTION = (960, 468)
-RESOLUTION = (128, 160)     # This is the resolution of the 1.8" TFT screen
+RESOLUTION = (320, 200)
+# RESOLUTION = (256, 128)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-PADDLE_HEIGHT = 15
-PADDLE_WIDTH = 3
-BALL_WIDTH = 7
-BALL_HEIGHT = 7
+PADDLE_HEIGHT = 25
+PADDLE_WIDTH = 8
+BALL_WIDTH = 12
+BALL_HEIGHT = 12
 PADDLE_GUTTER_OFFSET = 4  	# Offset for the paddles
 CENTER_DIVIDER_SIZE = 2		# Size of the squares that divide the playing area in half
 FIELD_EDGE_WIDTH = 3		# Edging on the top and bottom playing area
 FIELD_EDGE_HEIGHT = 1		# Height of edging
 FIELD_EDGE_OFFSET = 2		# Offset between the display surface edge and the edging
 CAN_RESET_HOUR = True	    # On the hour we reset the score to 00, 00
+SCREEN_MODE = pygame.RESIZABLE #pygame.SCALED pygame.FULLSCREEN
 
 def main():
 
     pygame.init()
-    #RESOLUTION = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+    # RESOLUTION = (pygame.display.Info().current_w, pygame.display.Info().current_h)
     pygame.mouse.set_visible(False)  # Closes #4
-    SCREEN = pygame.display.set_mode(RESOLUTION, pygame.FULLSCREEN)
-    #SCREEN = pygame.display.set_mode(RESOLUTION)
+    SCREEN = pygame.display.set_mode(RESOLUTION, SCREEN_MODE)
 
     # Calculate the play area
     play_area = pygame.Rect(PADDLE_GUTTER_OFFSET + PADDLE_WIDTH, FIELD_EDGE_OFFSET + FIELD_EDGE_HEIGHT, SCREEN.get_width() -
@@ -83,8 +83,8 @@ def main():
     if SCREEN.get_height() / CENTER_DIVIDER_SIZE % 2 == 0:
         CENTER_DIVIDER_Y = CENTER_DIVIDER_SIZE / 2
 
-    CENTER_DIVIDER_Y = range(CENTER_DIVIDER_Y, SCREEN.get_height(),
-                             2 * CENTER_DIVIDER_SIZE)
+    CENTER_DIVIDER_Y = list(range(int(CENTER_DIVIDER_Y), SCREEN.get_height(),
+                             int(2 * CENTER_DIVIDER_SIZE)))
 
     CENTER_DIVIDER_X = (SCREEN.get_width() / 2) - (CENTER_DIVIDER_SIZE / 2)
 
@@ -92,13 +92,11 @@ def main():
     FIELD_EDGE_X = FIELD_EDGE_WIDTH
     if SCREEN.get_width() % 2 == 0:
         FIELD_EDGE_X = FIELD_EDGE_WIDTH / 2
-    field_edge_x = range(FIELD_EDGE_X, SCREEN.get_width(), 2 * FIELD_EDGE_WIDTH)
+    field_edge_x = list(range(int(FIELD_EDGE_X), SCREEN.get_width(), 2 * int(FIELD_EDGE_WIDTH)))
 
     Clock = pygame.time.Clock()
 
-    #background = pygame.Surface(RESOLUTION, -2147483648)
-    #background = pygame.display.set_mode(RESOLUTION)
-    background = pygame.display.set_mode(RESOLUTION, pygame.FULLSCREEN)
+    background = pygame.display.set_mode(RESOLUTION, SCREEN_MODE)
     background.fill(BLACK)
 
     # Draw the background - top and bottom edges and the center divider
@@ -115,6 +113,7 @@ def main():
 
     SCREEN.blit(background, (0, 0))
     pygame.display.flip()
+
     original_background = background.copy()
 
     # Create the DirtySprite group
@@ -160,7 +159,7 @@ def main():
                     RUNNING = False
 
     pygame.quit()
-    sys.exit            # this is here to play nice with
+    sys.exit(0)            # this is here to play nice with OS
 
 
 def check_time(right_paddle, left_paddle, left_score, right_score, ball):
@@ -168,12 +167,13 @@ def check_time(right_paddle, left_paddle, left_score, right_score, ball):
     If different it forces a miss to increase the score"""
     global CAN_RESET_HOUR
     now = datetime.datetime.now()
-    hour = now.strftime("%I")
+    hour = int(now.strftime("%I"))
+    minute = int(now.minute)
 
-    if left_score.score < int(hour):
+    if left_score.score < hour:
         right_paddle.allow_score()
         return
-    if right_score.score < now.minute:
+    if right_score.score < minute:
         left_paddle.allow_score()
         CAN_RESET_HOUR = True
         return
